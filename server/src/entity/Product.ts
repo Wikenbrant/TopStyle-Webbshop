@@ -15,4 +15,8 @@ export class Product extends BaseEntity {
   @Field()
   @Column()
   description: string;
+
+  @Field(() => Int)
+  @Column()
+  price: number;
 }

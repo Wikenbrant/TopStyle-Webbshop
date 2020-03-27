@@ -16,6 +16,9 @@ class CreateProductInput {
 
   @Field()
   description: string;
+
+  @Field(() => Int)
+  price: number;
 }
 
 @InputType()
@@ -25,6 +28,9 @@ class UpdateProductInput {
 
   @Field(() => String, { nullable: true })
   description?: string;
+
+  @Field(() => Int, { nullable: true })
+  price?: number;
 }
 
 @Resolver()
