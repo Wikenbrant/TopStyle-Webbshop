@@ -9,11 +9,11 @@ import {
   Ctx,
   ObjectType
 } from "type-graphql";
-import User from "src/entity/User";
+import User from "../entity/User";
 import { hash, compare } from "bcryptjs";
-import { MyContext } from "src/MyContext";
-import { sendRefreshToken } from "src/sendRefreshToken";
-import { createRefreshToken, createAccessToken } from "src/auth";
+import { MyContext } from "../MyContext";
+import { sendRefreshToken } from "../sendRefreshToken";
+import { createRefreshToken, createAccessToken } from "../auth";
 import { getConnection } from "typeorm";
 
 @InputType()

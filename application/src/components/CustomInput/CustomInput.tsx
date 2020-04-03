@@ -5,16 +5,27 @@ import PropTypes from "prop-types";
 import classNames from "classnames";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Input from "@material-ui/core/Input";
+import FormControl, { FormControlProps } from "@material-ui/core/FormControl";
+import InputLabel, { InputLabelProps } from "@material-ui/core/InputLabel";
+import Input, { InputProps } from "@material-ui/core/Input";
 
-import styles from "assets/jss/material-kit-react/components/customInputStyle.js";
+import customInputStyle from "../../assets/jss/material-kit-react/components/customInputStyle";
 
-const useStyles = makeStyles(styles);
+import { useField, FieldAttributes } from "formik";
 
-export default function CustomInput(props) {
-  const classes = useStyles();
+interface Props {
+  labelText?: React.ReactNode;
+  labelProps?: InputLabelProps;
+  id?: string;
+  inputProps?: InputProps;
+  formControlProps?: FormControlProps;
+  inputRootCustomClasses?: any;
+  error?: boolean;
+  success?: boolean;
+  white?: boolean;
+}
+const CustomInput: React.FC<Props & FieldAttributes<{}>> = props => {
+  const classes = customInputStyle();
   const {
     formControlProps,
     labelText,
@@ -24,8 +35,10 @@ export default function CustomInput(props) {
     error,
     white,
     inputRootCustomClasses,
-    success
+    success,
+    ...rest
   } = props;
+  const [field] = useField(rest);
 
   const labelClasses = classNames({
     [" " + classes.labelRootError]: error,
@@ -65,6 +78,7 @@ export default function CustomInput(props) {
         </InputLabel>
       ) : null}
       <Input
+        {...field}
         classes={{
           input: inputClasses,
           root: marginTop,
@@ -76,16 +90,5 @@ export default function CustomInput(props) {
       />
     </FormControl>
   );
-}
-
-CustomInput.propTypes = {
-  labelText: PropTypes.node,
-  labelProps: PropTypes.object,
-  id: PropTypes.string,
-  inputProps: PropTypes.object,
-  formControlProps: PropTypes.object,
-  inputRootCustomClasses: PropTypes.string,
-  error: PropTypes.bool,
-  success: PropTypes.bool,
-  white: PropTypes.bool
 };
+export default CustomInput;

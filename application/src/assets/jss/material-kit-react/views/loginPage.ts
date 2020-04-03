@@ -1,9 +1,10 @@
-import { container } from "assets/jss/material-kit-react.js";
+import { container } from "../../material-kit-react";
+import { makeStyles } from "@material-ui/core";
 
-const signupPageStyle = {
+const signupPageStyle = makeStyles({
   container: {
     ...container,
-    zIndex: "2",
+    zIndex: 2,
     position: "relative",
     paddingTop: "20vh",
     color: "#FFFFFF",
@@ -86,6 +87,6 @@ const signupPageStyle = {
   inputIconsColor: {
     color: "#495057"
   }
-};
+});
 
 export default signupPageStyle;

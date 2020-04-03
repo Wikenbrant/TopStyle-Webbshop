@@ -16,7 +16,7 @@ import { Apps, CloudDownload } from "@material-ui/icons";
 
 // core components
 //import CustomDropdown from "components/CustomDropdown/CustomDropdown.js";
-import Button from "../CustomButtons/Button.js";
+import Button from "../CustomButtons/Button";
 
 import headerLinksStyle from "../../assets/jss/material-kit-react/components/headerLinksStyle";
 

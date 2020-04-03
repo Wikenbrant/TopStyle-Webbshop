@@ -16,6 +16,7 @@ import Menu from "@material-ui/icons/Menu";
 // core components
 import styles from "../../assets/jss/material-kit-react/components/headerStyle";
 import { useHistory } from "react-router-dom";
+import { Typography } from "@material-ui/core";
 
 interface Props {
   color:
@@ -102,7 +103,7 @@ const Header: React.FC<Props> = props => {
   });
   const brandComponent = (
     <Button onClick={() => history.push("/")} className={classes.title}>
-      {brand}
+      <Typography variant="h5">{brand}</Typography>
     </Button>
   );
   return (

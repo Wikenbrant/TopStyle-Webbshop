@@ -17,7 +17,7 @@ const Layout: React.FC = ({ children }) => {
         }}
       />
       {children}
-      {/*<Footer />*/}
+      {<Footer />}
     </>
   );
 };

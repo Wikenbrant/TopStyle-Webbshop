@@ -11,6 +11,7 @@ import { verify } from "jsonwebtoken";
 import User from "./entity/User";
 import { sendRefreshToken } from "./sendRefreshToken";
 import { createRefreshToken, createAccessToken } from "./auth";
+import UserResolver from "./resolvers/UserResolver";
 
 (async () => {
   const app = express();
@@ -59,7 +60,7 @@ import { createRefreshToken, createAccessToken } from "./auth";
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [ProductResolver],
+      resolvers: [ProductResolver, UserResolver],
       validate: true
     }),
     context: ({ req, res }) => ({ req, res })
