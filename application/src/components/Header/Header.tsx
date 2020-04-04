@@ -1,10 +1,7 @@
 import React from "react";
 // nodejs library that concatenates classes
 import classNames from "classnames";
-// nodejs library to set properties for components
-import PropTypes from "prop-types";
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
+
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -17,6 +14,7 @@ import Menu from "@material-ui/icons/Menu";
 import styles from "../../assets/jss/material-kit-react/components/headerStyle";
 import { useHistory } from "react-router-dom";
 import { Typography } from "@material-ui/core";
+import Cart from "../Cart/Cart";
 
 interface Props {
   color:
@@ -118,6 +116,10 @@ const Header: React.FC<Props> = props => {
           ) : (
             brandComponent
           )}
+          <Cart
+            className={classes.navLink}
+            iconColor={props.changeColorOnScroll.color}
+          />
         </div>
         <Hidden smDown implementation="css">
           {rightLinks}

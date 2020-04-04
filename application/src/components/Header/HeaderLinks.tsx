@@ -19,12 +19,12 @@ import { Apps, CloudDownload } from "@material-ui/icons";
 import Button from "../CustomButtons/Button";
 
 import headerLinksStyle from "../../assets/jss/material-kit-react/components/headerLinksStyle";
+import Cart from "../Cart/Cart";
 
 const HeaderLinks = () => {
   const classes = headerLinksStyle();
   return (
     <List className={classes.list}>
-      <ListItem className={classes.listItem}></ListItem>
       <ListItem className={classes.listItem}>
         <Tooltip
           id="instagram-twitter"

@@ -143,7 +143,7 @@ export type GetAllProductsQuery = (
   { __typename?: 'Query' }
   & { products: Array<(
     { __typename?: 'Product' }
-    & Pick<Product, 'id' | 'name' | 'description'>
+    & Pick<Product, 'id' | 'name' | 'description' | 'price'>
   )> }
 );
 
@@ -278,6 +278,7 @@ export const GetAllProductsDocument = gql`
     id
     name
     description
+    price
   }
 }
     `;

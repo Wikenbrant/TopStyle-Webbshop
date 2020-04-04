@@ -1,11 +1,8 @@
 import React from "react";
-import Header from "../../components/Header/Header";
 import makeLandingPageStyle from "../../assets/jss/material-kit-react/views/landingPage";
 import Parallax from "../../components/Parallax/Parallax";
-import HeaderLinks from "../../components/Header/HeaderLinks";
 import GridContainer from "../../components/Grid/GridContainer";
 import GridItem from "../../components/Grid/GridItem";
-import Footer from "../../components/Footer/Footer";
 import classNames from "classnames";
 import ProductSection from "./Sections/ProductSection";
 

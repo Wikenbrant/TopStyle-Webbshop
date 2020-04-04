@@ -1,7 +1,4 @@
 import React from "react";
-// nodejs library to set properties for components
-import PropTypes from "prop-types";
-
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import Grid, { GridProps } from "@material-ui/core/Grid";
@@ -15,15 +12,17 @@ const useStyles = makeStyles({
 });
 interface Props extends GridProps {}
 
-const GridContainer: React.FC<Props> = props => {
+const GridContainer = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
   const classes = useStyles();
   const { children, className, ...rest } = props;
   return (
-    <Grid container {...rest} className={classes.grid + " " + className}>
-      {children}
-    </Grid>
+    <div ref={ref}>
+      <Grid container {...rest} className={classes.grid + " " + className}>
+        {children}
+      </Grid>
+    </div>
   );
-};
+});
 GridContainer.defaultProps = {
   className: ""
 };

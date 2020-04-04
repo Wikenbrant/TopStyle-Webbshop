@@ -1,11 +1,40 @@
 import { Product } from "../generated/graphql";
-import {
-  InitialShopingCartStateType,
-  CartLine
-} from "../Contexts/ShopingCartContext";
+import { CartLine } from "../Contexts/ShopingCartContext";
+
+type ShopingCartActions = AddItem | RemoveItem | OpenCart | CloseCart;
+
+type AddItem = {
+  type: ShopingCartActionTypes.ADD_PRODUCT;
+  payload: { product: Product; quantity: number };
+};
+
+type RemoveItem = {
+  type: ShopingCartActionTypes.REMOVE_PRODUCT;
+  payload: { productId: number; quantity: number };
+};
+
+type OpenCart = {
+  type: ShopingCartActionTypes.OPEN;
+  payload: { open: true; anchorEl: HTMLButtonElement };
+};
+
+type CloseCart = {
+  type: ShopingCartActionTypes.CLOSE;
+  payload: { open: false; anchorEl: null };
+};
+
+export enum ShopingCartActionTypes {
+  ADD_PRODUCT = "ADD_PRODUCT",
+  REMOVE_PRODUCT = "REMOVE_PRODUCT",
+  OPEN = "OPEN",
+  CLOSE = "CLOSE"
+}
 
 const ShopingCartReducer: React.Reducer<
-  { cart: CartLine[] },
+  {
+    cart: CartLine[];
+    cartOpen: { open: boolean; anchorEl: HTMLButtonElement | null };
+  },
   ShopingCartActions
 > = (state, action) => {
   switch (action.type) {
@@ -46,26 +75,16 @@ const ShopingCartReducer: React.Reducer<
       }
       return { ...state, cart: updatedCart };
     }
+
+    case ShopingCartActionTypes.OPEN: {
+      return { ...state, cartOpen: { ...action.payload } };
+    }
+    case ShopingCartActionTypes.CLOSE: {
+      return { ...state, cartOpen: { ...action.payload } };
+    }
     default:
       return state;
   }
 };
 
 export default ShopingCartReducer;
-
-type ShopingCartActions = AddItem | RemoveItem;
-
-type AddItem = {
-  type: ShopingCartActionTypes.ADD_PRODUCT;
-  payload: { product: Product; quantity: number };
-};
-
-type RemoveItem = {
-  type: ShopingCartActionTypes.REMOVE_PRODUCT;
-  payload: { productId: number; quantity: number };
-};
-
-export enum ShopingCartActionTypes {
-  ADD_PRODUCT = "ADD_PRODUCT",
-  REMOVE_PRODUCT = "REMOVE_PRODUCT"
-}

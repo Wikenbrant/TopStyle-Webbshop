@@ -1,20 +1,15 @@
-import React, { ButtonHTMLAttributes } from "react";
-// nodejs library to set properties for components
-import PropTypes from "prop-types";
+import React from "react";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 
-// @material-ui/core components
-import makeStyles from "@material-ui/core/styles/makeStyles";
-import Button, { ButtonProps } from "@material-ui/core/Button";
+import Button from "@material-ui/core/Button";
 
 // core components
 
 import buttonStyle from "../../assets/jss/material-kit-react/components/buttonStyle";
-import { ButtonBaseActions } from "@material-ui/core/ButtonBase";
 
 interface Props {
-  color:
+  color?:
     | "primary"
     | "info"
     | "success"
@@ -37,10 +32,13 @@ interface Props {
   justIcon?: boolean;
   children?: React.ReactNode;
   className?: string;
+  href?: string;
+  target?: string;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
-const RegularButton = React.forwardRef(
-  (props: Props, ref: React.Ref<HTMLButtonElement>) => {
+const RegularButton = React.forwardRef<HTMLButtonElement, Props>(
+  (props, ref) => {
     const {
       color,
       round,
@@ -78,7 +76,5 @@ const RegularButton = React.forwardRef(
     );
   }
 );
-
-RegularButton.propTypes = {};
 
 export default RegularButton;

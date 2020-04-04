@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useState } from "react";
 import { Product } from "../generated/graphql";
 import ShopingCartContext from "./ShopingCartContext";
 import ShopingCartReducer, {
@@ -6,7 +6,10 @@ import ShopingCartReducer, {
 } from "../Reducers/ShopingCartReducer";
 
 const ShopingCartState: React.FC = ({ children }) => {
-  const [{ cart }, dispatch] = useReducer(ShopingCartReducer, { cart: [] });
+  const [{ cart, cartOpen }, dispatch] = useReducer(ShopingCartReducer, {
+    cart: [],
+    cartOpen: { open: false, anchorEl: null }
+  });
 
   const AddProductToCart = (product: Product, quantity = 1) =>
     dispatch({
@@ -20,9 +23,26 @@ const ShopingCartState: React.FC = ({ children }) => {
       payload: { productId, quantity }
     });
 
+  const CloseCart = () =>
+    dispatch({
+      type: ShopingCartActionTypes.CLOSE,
+      payload: { open: false, anchorEl: null }
+    });
+  const OpenCart = (anchorEl: HTMLButtonElement) =>
+    dispatch({
+      type: ShopingCartActionTypes.OPEN,
+      payload: { open: true, anchorEl }
+    });
   return (
     <ShopingCartContext.Provider
-      value={{ cart, AddProductToCart, RemoveProductFromCart }}
+      value={{
+        cart,
+        cartOpen,
+        AddProductToCart,
+        RemoveProductFromCart,
+        OpenCart,
+        CloseCart
+      }}
     >
       {children}
     </ShopingCartContext.Provider>

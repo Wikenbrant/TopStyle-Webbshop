@@ -13,29 +13,41 @@ import signupPageStyle from "../../assets/jss/material-kit-react/views/loginPage
 import image from "../../assets/img/bg7.jpg";
 import { Formik, Form } from "formik";
 import {
-  LoginMutationVariables,
-  useLoginMutation
+  useLoginMutation,
+  RegisterMutationVariables,
+  useRegisterMutation
 } from "../../generated/graphql";
 import { Typography, Button } from "@material-ui/core";
 import TokenContext from "../../Contexts/TokenContext";
 import { useHistory } from "react-router-dom";
 import CustomFieldInput from "../../components/CustomInput/CustomFieldInput";
 
-const validationSchema: yup.ObjectSchema<LoginMutationVariables> = yup.object({
-  email: yup
-    .string()
-    .email()
-    .required(),
-  password: yup.string().required()
-});
+const validationSchema: yup.ObjectSchema<RegisterMutationVariables> = yup.object(
+  {
+    name: yup
+      .string()
+      .required()
+      .min(2),
+    email: yup
+      .string()
+      .email()
+      .required(),
+    password: yup
+      .string()
+      .required()
+      .min(6)
+  }
+);
 
-const LoginPage: React.FC = () => {
+const RegisterPage: React.FC = () => {
   const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
-  const initialValues: LoginMutationVariables & { errormessage: string } = {
+  const initialValues: RegisterMutationVariables & { errormessage: string } = {
+    name: "",
     email: "",
     password: "",
     errormessage: ""
   };
+  const [Register] = useRegisterMutation();
   const [Login] = useLoginMutation();
   const history = useHistory();
   const { SetAccessToken } = useContext(TokenContext);
@@ -67,13 +79,16 @@ const LoginPage: React.FC = () => {
                   ) => {
                     setSubmitting(true);
                     try {
-                      const response = await Login({ variables: values });
+                      const response = await Register({ variables: values });
 
                       if (response.errors) {
                         setErrors({ errormessage: response.errors.join(", ") });
                         setSubmitting(false);
                       } else if (response.data) {
-                        SetAccessToken(response.data.login.accessToken);
+                        const resp = await Login({ variables: values });
+                        if (resp.data) {
+                          SetAccessToken(resp.data.login.accessToken);
+                        }
                         resetForm();
                         setSubmitting(false);
                         history.push("/");
@@ -95,6 +110,13 @@ const LoginPage: React.FC = () => {
                         <Typography paragraph color="error">
                           {errors.errormessage ?? null}
                         </Typography>
+                        <CustomFieldInput
+                          name="name"
+                          textFieldProps={{ label: "Name" }}
+                          formControlProps={{
+                            fullWidth: true
+                          }}
+                        />
                         <CustomFieldInput
                           name="email"
                           textFieldProps={{ label: "Email...", type: "email" }}
@@ -136,4 +158,4 @@ const LoginPage: React.FC = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
