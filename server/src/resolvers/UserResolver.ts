@@ -103,7 +103,7 @@ export default class UserResolver {
   async revokeRefreshTokensForUser(@Arg("userId", () => Int) userId: number) {
     await getConnection()
       .getRepository(User)
-      .increment({ id: userId }, "tokenVersion", 1);
+      .increment({ userId }, "tokenVersion", 1);
 
     return true;
   }

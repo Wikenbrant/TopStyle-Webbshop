@@ -1,6 +1,6 @@
 query GetAllProducts {
   products {
-    id
+    productId
     name
     description
     price

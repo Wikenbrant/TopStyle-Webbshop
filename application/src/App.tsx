@@ -14,7 +14,7 @@ function App() {
           <li>
             <p>{JSON.stringify(product, null, 2)}</p>
             <p onClick={() => AddProductToCart(product as Product, 3)}>+</p>
-            <p onClick={() => RemoveProductFromCart(product.id, 3)}>-</p>
+            <p onClick={() => RemoveProductFromCart(product.productId, 3)}>-</p>
           </li>
         ))}
       </ul>

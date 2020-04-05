@@ -12,6 +12,7 @@ import User from "./entity/User";
 import { sendRefreshToken } from "./sendRefreshToken";
 import { createRefreshToken, createAccessToken } from "./auth";
 import UserResolver from "./resolvers/UserResolver";
+import OrderResolver from "./resolvers/OrderResolver";
 
 (async () => {
   const app = express();
@@ -41,7 +42,7 @@ import UserResolver from "./resolvers/UserResolver";
       return res.send({ ok: false, accessToken: "" });
     }
 
-    const user = await User.findOne({ id: payload.userId });
+    const user = await User.findOne({ userId: payload.userId });
 
     if (!user) {
       return res.send({ ok: false, accessToken: "" });
@@ -60,7 +61,7 @@ import UserResolver from "./resolvers/UserResolver";
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [ProductResolver, UserResolver],
+      resolvers: [ProductResolver, UserResolver, OrderResolver],
       validate: true
     }),
     context: ({ req, res }) => ({ req, res })

@@ -35,6 +35,9 @@ interface Props {
   href?: string;
   target?: string;
   onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  id?: string;
+  variant?: "text" | "outlined" | "contained";
+  style?: React.CSSProperties;
 }
 
 const RegularButton = React.forwardRef<HTMLButtonElement, Props>(

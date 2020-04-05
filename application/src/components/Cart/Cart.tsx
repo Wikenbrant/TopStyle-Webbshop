@@ -1,36 +1,31 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import ShopingCartContext from "../../Contexts/ShopingCartContext";
 import {
   makeStyles,
-  Popper,
-  Grow,
   Paper,
-  ClickAwayListener,
-  IconButton,
   Typography,
-  Popover
+  Popover,
+  TextField,
+  InputAdornment,
+  IconButton
 } from "@material-ui/core";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import GridContainer from "../Grid/GridContainer";
 import GridItem from "../Grid/GridItem";
 import Button from "../CustomButtons/Button";
+import RemoveIcon from "@material-ui/icons/Remove";
+import AddIcon from "@material-ui/icons/Add";
 
-const Cart: React.FC<{
-  className: string;
-  iconColor:
-    | "primary"
-    | "info"
-    | "success"
-    | "warning"
-    | "danger"
-    | "transparent"
-    | "white"
-    | "rose"
-    | "dark";
-}> = ({ className, iconColor }) => {
-  const { cart, OpenCart, CloseCart, cartOpen } = useContext(
-    ShopingCartContext
-  );
+const Cart: React.FC<{}> = () => {
+  const {
+    cart,
+    OpenCart,
+    CloseCart,
+    cartOpen,
+    AddProductToCart,
+    SetProductToCart,
+    RemoveProductFromCart
+  } = useContext(ShopingCartContext);
   const useStyles = makeStyles(theme => ({
     container: { float: "right", position: "relative" },
     icon: { color: "inherit" },
@@ -54,8 +49,8 @@ const Cart: React.FC<{
     },
     paper: {
       padding: theme.spacing(1),
-      minWidth: 150,
-      minHeight: 150
+      width: 300,
+      minHeight: 50
     }
   }));
   const classes = useStyles();
@@ -64,9 +59,12 @@ const Cart: React.FC<{
     <div className={classes.container}>
       <div className={classes.cart}>
         <Button
+          id="cart"
           className={classes.icon}
           onClick={e => {
-            OpenCart(e.currentTarget);
+            if (cart.length > 0) {
+              OpenCart(e.currentTarget);
+            }
           }}
           color="transparent"
         >
@@ -87,17 +85,102 @@ const Cart: React.FC<{
         }}
       >
         <Paper className={classes.paper}>
-          <GridContainer spacing={2}>
+          <GridContainer
+            spacing={2}
+            direction="row"
+            alignItems="center"
+            justify="center"
+          >
             <GridItem>
               <Typography variant="h5" align="center">
                 Cart
               </Typography>
             </GridItem>
             {cart.map(({ product, quantity }) => (
-              <GridItem key={product.id}>
-                {product.name} {quantity}
+              <GridItem key={product.productId}>
+                <GridContainer alignItems="center" justify="center">
+                  <GridItem xs={3}>
+                    <Typography
+                      paragraph
+                      align="right"
+                      style={{ fontSize: ".9rem", marginBottom: 0 }}
+                    >
+                      {product.name}
+                    </Typography>
+                  </GridItem>
+                  <GridItem xs={6}>
+                    <TextField
+                      style={{ fontSize: ".9rem" }}
+                      value={quantity}
+                      type="number"
+                      onChange={e =>
+                        SetProductToCart(product, +e.currentTarget.value)
+                      }
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <IconButton
+                              onClick={e =>
+                                RemoveProductFromCart(product.productId, 1)
+                              }
+                              size="small"
+                            >
+                              <RemoveIcon />
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            st
+                            <IconButton
+                              style={{ marginLeft: 5 }}
+                              onClick={e => AddProductToCart(product, 1)}
+                              size="small"
+                            >
+                              <AddIcon />
+                            </IconButton>
+                          </InputAdornment>
+                        )
+                      }}
+                    />
+                  </GridItem>
+                  <GridItem xs={3}>
+                    <Typography
+                      paragraph
+                      style={{ fontSize: ".9rem", marginBottom: 0 }}
+                      align="left"
+                    >
+                      {product.price * quantity} kr
+                    </Typography>
+                  </GridItem>
+                </GridContainer>
               </GridItem>
             ))}
+            <GridItem>
+              <Typography
+                variant="h6"
+                align="right"
+                style={{ marginRight: 30 }}
+              >
+                Totalt:{" "}
+                {cart
+                  .map(({ product, quantity }) => product.price * quantity)
+                  .reduce((a, b) => a + b, 0)}{" "}
+                kr
+              </Typography>
+            </GridItem>
+            <Button
+              color="success"
+              variant="contained"
+              style={{
+                width: "100%",
+                marginLeft: 30,
+                marginRight: 30,
+                marginBottom: 10
+              }}
+            >
+              Till kassan
+            </Button>
           </GridContainer>
         </Paper>
       </Popover>

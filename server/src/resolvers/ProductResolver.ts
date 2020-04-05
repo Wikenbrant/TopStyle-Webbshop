@@ -5,9 +5,11 @@ import {
   InputType,
   Field,
   Query,
-  Int
+  Int,
+  UseMiddleware
 } from "type-graphql";
 import { Product } from "../entity/Product";
+import { isAuth } from "../middleware/isAuth";
 
 @InputType()
 class CreateProductInput {
@@ -41,10 +43,11 @@ export default class ProductResolver {
   }
   @Query(() => Product)
   async product(@Arg("id", () => Int) id: number) {
-    return await Product.findOne({ where: { id } });
+    return await Product.findOne({ where: { productId: id } });
   }
 
   @Mutation(() => Product)
+  @UseMiddleware(isAuth)
   async createProduct(
     @Arg("input", () => CreateProductInput) input: CreateProductInput
   ) {
@@ -53,18 +56,20 @@ export default class ProductResolver {
   }
 
   @Mutation(() => Product)
+  @UseMiddleware(isAuth)
   async updateProduct(
     @Arg("id", () => Int) id: number,
     @Arg("input", () => UpdateProductInput) input: UpdateProductInput
   ) {
-    await Product.update({ id }, input);
+    await Product.update({ productId: id }, input);
     const product = await Product.findOne({ where: { id } });
     return product;
   }
 
   @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
   async deleteProduct(@Arg("id", () => Int) id: number) {
-    await Product.delete({ id });
+    await Product.delete({ productId: id });
     return true;
   }
 }

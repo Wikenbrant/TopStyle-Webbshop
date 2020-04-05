@@ -116,10 +116,7 @@ const Header: React.FC<Props> = props => {
           ) : (
             brandComponent
           )}
-          <Cart
-            className={classes.navLink}
-            iconColor={props.changeColorOnScroll.color}
-          />
+          <Cart />
         </div>
         <Hidden smDown implementation="css">
           {rightLinks}

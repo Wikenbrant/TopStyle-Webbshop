@@ -10,7 +10,7 @@ import {
   Product
 } from "../../../generated/graphql";
 import ShopingCartContext from "../../../Contexts/ShopingCartContext";
-import { Typography, FormControl, TextField } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import Button from "../../../components/CustomButtons/Button";
 
 export default function ProductSection() {
@@ -26,33 +26,63 @@ export default function ProductSection() {
   const { AddProductToCart, OpenCart } = useContext(ShopingCartContext);
   return (
     <div>
-      <GridContainer className={classes.section}>
-        <GridContainer justify="center">
-          <GridItem xs={12} sm={12} md={8}>
-            <h2 className={classes.title}>Products</h2>
-          </GridItem>
-        </GridContainer>
-        <GridContainer>
-          {products.map(product => (
-            <GridItem xs={12} md={4} key={product.id}>
-              {JSON.stringify(product)}
-              <h2 className={classes.title}>{product.name}</h2>
-              <h5 className={classes.description}>{product.description}</h5>
-              <Typography paragraph color="primary">
-                {product.price} kr
-                <Button
-                  color="transparent"
-                  onClick={e => {
-                    AddProductToCart(product, 1);
-                    OpenCart(e.currentTarget);
-                  }}
-                >
-                  Add to cart
-                </Button>
+      <GridContainer className={classes.section} spacing={5} direction="column">
+        <GridItem>
+          <GridContainer justify="center">
+            <GridItem xs={12} sm={12} md={8}>
+              <Typography variant="h5" className={classes.title}>
+                Products
               </Typography>
             </GridItem>
-          ))}
-        </GridContainer>
+          </GridContainer>
+        </GridItem>
+        <GridItem>
+          <GridContainer spacing={10}>
+            {products.map(product => (
+              <GridItem xs={12} md={6} lg={4} key={product.productId}>
+                <GridContainer>
+                  <GridItem xs={12}>
+                    <Typography variant="h6" className={classes.title}>
+                      {product.name}
+                    </Typography>
+                  </GridItem>
+                  <GridItem xs={12}>
+                    <Typography paragraph className={classes.description}>
+                      {product.description}
+                    </Typography>
+                  </GridItem>
+                  <GridItem xs={12}>
+                    <GridContainer justify="center" alignItems="center">
+                      <GridItem xs={4}>
+                        <Typography
+                          paragraph
+                          color="primary"
+                          style={{ marginBottom: 0 }}
+                          align="right"
+                        >
+                          {product.price} kr
+                        </Typography>
+                      </GridItem>
+                      <GridItem xs={6}>
+                        <Button
+                          color="success"
+                          onClick={e => {
+                            AddProductToCart(product, 1);
+                            OpenCart(document.querySelector("#cart"));
+                          }}
+                          variant="contained"
+                          size="lg"
+                        >
+                          Add to cart
+                        </Button>
+                      </GridItem>
+                    </GridContainer>
+                  </GridItem>
+                </GridContainer>
+              </GridItem>
+            ))}
+          </GridContainer>
+        </GridItem>
       </GridContainer>
     </div>
   );

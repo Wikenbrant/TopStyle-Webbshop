@@ -11,6 +11,16 @@ export type Scalars = {
   Float: number;
 };
 
+export type CreateOrderDetailInput = {
+  productID: Scalars['Int'];
+  quantity: Scalars['Int'];
+  sum: Scalars['Int'];
+};
+
+export type CreateOrderInput = {
+  orderDetails: Array<CreateOrderDetailInput>;
+};
+
 export type CreateProductInput = {
   name: Scalars['String'];
   description: Scalars['String'];
@@ -32,6 +42,8 @@ export type Mutation = {
   login: LoginResponse;
   logout: Scalars['Boolean'];
   revokeRefreshTokensForUser: Scalars['Boolean'];
+  createOrder: Order;
+  deleteOrder: Scalars['Boolean'];
 };
 
 
@@ -66,9 +78,37 @@ export type MutationRevokeRefreshTokensForUserArgs = {
   userId: Scalars['Int'];
 };
 
+
+export type MutationCreateOrderArgs = {
+  input: CreateOrderInput;
+};
+
+
+export type MutationDeleteOrderArgs = {
+  id: Scalars['Int'];
+};
+
+export type Order = {
+   __typename?: 'Order';
+  orderId: Scalars['Int'];
+  user: User;
+  orderDetails: Array<OrderDetail>;
+};
+
+export type OrderDetail = {
+   __typename?: 'OrderDetail';
+  id: Scalars['Int'];
+  orderId: Scalars['Int'];
+  productId: Scalars['Int'];
+  order: Order;
+  product: Product;
+  quantity: Scalars['Int'];
+  sum: Scalars['Int'];
+};
+
 export type Product = {
    __typename?: 'Product';
-  id: Scalars['Int'];
+  productId: Scalars['Int'];
   name: Scalars['String'];
   description: Scalars['String'];
   price: Scalars['Int'];
@@ -80,6 +120,8 @@ export type Query = {
   product: Product;
   users: Array<User>;
   user: Array<User>;
+  orders: Array<Order>;
+  order: Order;
 };
 
 
@@ -89,6 +131,11 @@ export type QueryProductArgs = {
 
 
 export type QueryUserArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryOrderArgs = {
   id: Scalars['Int'];
 };
 
@@ -106,10 +153,34 @@ export type UpdateProductInput = {
 
 export type User = {
    __typename?: 'User';
-  id: Scalars['Int'];
+  userId: Scalars['Int'];
   name: Scalars['String'];
   email: Scalars['String'];
 };
+
+export type CreateOrderMutationVariables = {
+  input: CreateOrderInput;
+};
+
+
+export type CreateOrderMutation = (
+  { __typename?: 'Mutation' }
+  & { createOrder: (
+    { __typename?: 'Order' }
+    & Pick<Order, 'orderId'>
+    & { user: (
+      { __typename?: 'User' }
+      & Pick<User, 'userId' | 'name' | 'email'>
+    ), orderDetails: Array<(
+      { __typename?: 'OrderDetail' }
+      & Pick<OrderDetail, 'quantity' | 'sum'>
+      & { product: (
+        { __typename?: 'Product' }
+        & Pick<Product, 'productId' | 'name' | 'description' | 'price'>
+      ) }
+    )> }
+  ) }
+);
 
 export type CreateProductMutationVariables = {
   name: Scalars['String'];
@@ -122,7 +193,7 @@ export type CreateProductMutation = (
   { __typename?: 'Mutation' }
   & { createProduct: (
     { __typename?: 'Product' }
-    & Pick<Product, 'id' | 'name' | 'description' | 'price'>
+    & Pick<Product, 'productId' | 'name' | 'description' | 'price'>
   ) }
 );
 
@@ -143,7 +214,53 @@ export type GetAllProductsQuery = (
   { __typename?: 'Query' }
   & { products: Array<(
     { __typename?: 'Product' }
-    & Pick<Product, 'id' | 'name' | 'description' | 'price'>
+    & Pick<Product, 'productId' | 'name' | 'description' | 'price'>
+  )> }
+);
+
+export type GetOrderQueryVariables = {
+  id: Scalars['Int'];
+};
+
+
+export type GetOrderQuery = (
+  { __typename?: 'Query' }
+  & { order: (
+    { __typename?: 'Order' }
+    & Pick<Order, 'orderId'>
+    & { user: (
+      { __typename?: 'User' }
+      & Pick<User, 'userId' | 'name' | 'email'>
+    ), orderDetails: Array<(
+      { __typename?: 'OrderDetail' }
+      & Pick<OrderDetail, 'quantity' | 'sum'>
+      & { product: (
+        { __typename?: 'Product' }
+        & Pick<Product, 'productId' | 'name' | 'description' | 'price'>
+      ) }
+    )> }
+  ) }
+);
+
+export type GetOrdersQueryVariables = {};
+
+
+export type GetOrdersQuery = (
+  { __typename?: 'Query' }
+  & { orders: Array<(
+    { __typename?: 'Order' }
+    & Pick<Order, 'orderId'>
+    & { user: (
+      { __typename?: 'User' }
+      & Pick<User, 'userId' | 'name' | 'email'>
+    ), orderDetails: Array<(
+      { __typename?: 'OrderDetail' }
+      & Pick<OrderDetail, 'quantity' | 'sum'>
+      & { product: (
+        { __typename?: 'Product' }
+        & Pick<Product, 'productId' | 'name' | 'description' | 'price'>
+      ) }
+    )> }
   )> }
 );
 
@@ -160,7 +277,7 @@ export type LoginMutation = (
     & Pick<LoginResponse, 'accessToken'>
     & { user: (
       { __typename?: 'User' }
-      & Pick<User, 'id' | 'name' | 'email'>
+      & Pick<User, 'userId' | 'name' | 'email'>
     ) }
   ) }
 );
@@ -184,7 +301,7 @@ export type RegisterMutation = (
   { __typename?: 'Mutation' }
   & { register: (
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'name' | 'email'>
+    & Pick<User, 'userId' | 'name' | 'email'>
   ) }
 );
 
@@ -200,15 +317,62 @@ export type UpdateProductMutation = (
   { __typename?: 'Mutation' }
   & { updateProduct: (
     { __typename?: 'Product' }
-    & Pick<Product, 'id' | 'name' | 'description' | 'price'>
+    & Pick<Product, 'productId' | 'name' | 'description' | 'price'>
   ) }
 );
 
 
+export const CreateOrderDocument = gql`
+    mutation CreateOrder($input: CreateOrderInput!) {
+  createOrder(input: $input) {
+    orderId
+    user {
+      userId
+      name
+      email
+    }
+    orderDetails {
+      product {
+        productId
+        name
+        description
+        price
+      }
+      quantity
+      sum
+    }
+  }
+}
+    `;
+export type CreateOrderMutationFn = ApolloReactCommon.MutationFunction<CreateOrderMutation, CreateOrderMutationVariables>;
+
+/**
+ * __useCreateOrderMutation__
+ *
+ * To run a mutation, you first call `useCreateOrderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateOrderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createOrderMutation, { data, loading, error }] = useCreateOrderMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateOrderMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateOrderMutation, CreateOrderMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateOrderMutation, CreateOrderMutationVariables>(CreateOrderDocument, baseOptions);
+      }
+export type CreateOrderMutationHookResult = ReturnType<typeof useCreateOrderMutation>;
+export type CreateOrderMutationResult = ApolloReactCommon.MutationResult<CreateOrderMutation>;
+export type CreateOrderMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateOrderMutation, CreateOrderMutationVariables>;
 export const CreateProductDocument = gql`
     mutation CreateProduct($name: String!, $description: String!, $price: Int!) {
   createProduct(input: {name: $name, description: $description, price: $price}) {
-    id
+    productId
     name
     description
     price
@@ -275,7 +439,7 @@ export type DeleteProductMutationOptions = ApolloReactCommon.BaseMutationOptions
 export const GetAllProductsDocument = gql`
     query GetAllProducts {
   products {
-    id
+    productId
     name
     description
     price
@@ -307,11 +471,106 @@ export function useGetAllProductsLazyQuery(baseOptions?: ApolloReactHooks.LazyQu
 export type GetAllProductsQueryHookResult = ReturnType<typeof useGetAllProductsQuery>;
 export type GetAllProductsLazyQueryHookResult = ReturnType<typeof useGetAllProductsLazyQuery>;
 export type GetAllProductsQueryResult = ApolloReactCommon.QueryResult<GetAllProductsQuery, GetAllProductsQueryVariables>;
+export const GetOrderDocument = gql`
+    query GetOrder($id: Int!) {
+  order(id: $id) {
+    orderId
+    user {
+      userId
+      name
+      email
+    }
+    orderDetails {
+      product {
+        productId
+        name
+        description
+        price
+      }
+      quantity
+      sum
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetOrderQuery__
+ *
+ * To run a query within a React component, call `useGetOrderQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOrderQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOrderQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetOrderQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetOrderQuery, GetOrderQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetOrderQuery, GetOrderQueryVariables>(GetOrderDocument, baseOptions);
+      }
+export function useGetOrderLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetOrderQuery, GetOrderQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetOrderQuery, GetOrderQueryVariables>(GetOrderDocument, baseOptions);
+        }
+export type GetOrderQueryHookResult = ReturnType<typeof useGetOrderQuery>;
+export type GetOrderLazyQueryHookResult = ReturnType<typeof useGetOrderLazyQuery>;
+export type GetOrderQueryResult = ApolloReactCommon.QueryResult<GetOrderQuery, GetOrderQueryVariables>;
+export const GetOrdersDocument = gql`
+    query GetOrders {
+  orders {
+    orderId
+    user {
+      userId
+      name
+      email
+    }
+    orderDetails {
+      product {
+        productId
+        name
+        description
+        price
+      }
+      quantity
+      sum
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetOrdersQuery__
+ *
+ * To run a query within a React component, call `useGetOrdersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOrdersQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOrdersQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetOrdersQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetOrdersQuery, GetOrdersQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetOrdersQuery, GetOrdersQueryVariables>(GetOrdersDocument, baseOptions);
+      }
+export function useGetOrdersLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetOrdersQuery, GetOrdersQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetOrdersQuery, GetOrdersQueryVariables>(GetOrdersDocument, baseOptions);
+        }
+export type GetOrdersQueryHookResult = ReturnType<typeof useGetOrdersQuery>;
+export type GetOrdersLazyQueryHookResult = ReturnType<typeof useGetOrdersLazyQuery>;
+export type GetOrdersQueryResult = ApolloReactCommon.QueryResult<GetOrdersQuery, GetOrdersQueryVariables>;
 export const LoginDocument = gql`
     mutation Login($email: String!, $password: String!) {
   login(email: $email, password: $password) {
     user {
-      id
+      userId
       name
       email
     }
@@ -377,7 +636,7 @@ export type LogoutMutationOptions = ApolloReactCommon.BaseMutationOptions<Logout
 export const RegisterDocument = gql`
     mutation Register($name: String!, $email: String!, $password: String!) {
   register(input: {name: $name, email: $email, password: $password}) {
-    id
+    userId
     name
     email
   }
@@ -413,7 +672,7 @@ export type RegisterMutationOptions = ApolloReactCommon.BaseMutationOptions<Regi
 export const UpdateProductDocument = gql`
     mutation UpdateProduct($id: Int!, $name: String, $description: String, $price: Int) {
   updateProduct(id: $id, input: {name: $name, description: $description, price: $price}) {
-    id
+    productId
     name
     description
     price

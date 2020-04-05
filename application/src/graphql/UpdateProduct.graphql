@@ -8,7 +8,7 @@ mutation UpdateProduct(
     id: $id
     input: { name: $name, description: $description, price: $price }
   ) {
-    id
+    productId
     name
     description
     price

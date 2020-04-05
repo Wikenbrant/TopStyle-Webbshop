@@ -1,0 +1,20 @@
+query GetOrders {
+  orders {
+    orderId
+    user {
+      userId
+      name
+      email
+    }
+    orderDetails {
+      product {
+        productId
+        name
+        description
+        price
+      }
+      quantity
+      sum
+    }
+  }
+}
