@@ -5,6 +5,7 @@ import LandingPage from "../../views/LandingPage/LandingPage";
 import Layout from "../../Layout";
 import LoginPage from "../../views/LoginPage/LoginPage";
 import RegisterPage from "../../views/RegisterPage/RegisterPage";
+import Checkout from "../../views/Checkout/Checkout";
 
 var history = createBrowserHistory();
 
@@ -18,6 +19,9 @@ const Routing: React.FC = () => {
           </Route>
           <Route path="/Register">
             <RegisterPage />
+          </Route>
+          <Route path="/Order/:id">
+            <Checkout />
           </Route>
           <Route exact path="/">
             <LandingPage />

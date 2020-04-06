@@ -1,7 +1,13 @@
 import { Product } from "../generated/graphql";
 import { CartLine } from "../Contexts/ShopingCartContext";
 
-type ShopingCartActions = SetItem | AddItem | RemoveItem | OpenCart | CloseCart;
+type ShopingCartActions =
+  | SetItem
+  | AddItem
+  | RemoveItem
+  | OpenCart
+  | CloseCart
+  | ClearCart;
 
 type AddItem = {
   type: ShopingCartActionTypes.ADD_PRODUCT;
@@ -28,12 +34,17 @@ type CloseCart = {
   payload: { open: false; anchorEl: null };
 };
 
+type ClearCart = {
+  type: ShopingCartActionTypes.CLEAR;
+};
+
 export enum ShopingCartActionTypes {
   ADD_PRODUCT = "ADD_PRODUCT",
   REMOVE_PRODUCT = "REMOVE_PRODUCT",
   SET_PRODUCT = "SET_PRODUCT",
   OPEN = "OPEN",
-  CLOSE = "CLOSE"
+  CLOSE = "CLOSE",
+  CLEAR = "CLEAR"
 }
 
 const ShopingCartReducer: React.Reducer<
@@ -111,6 +122,9 @@ const ShopingCartReducer: React.Reducer<
     }
     case ShopingCartActionTypes.CLOSE: {
       return { ...state, cartOpen: { ...action.payload } };
+    }
+    case ShopingCartActionTypes.CLEAR: {
+      return { ...state, cart: [] };
     }
     default:
       return state;

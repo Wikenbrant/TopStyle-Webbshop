@@ -1,12 +1,12 @@
 import React from "react";
-import TokenState from "./TokenState";
 import ShopingCartState from "./ShopingCartState";
+import UserState from "./UserState";
 
 const GlobalState: React.FC = ({ children }) => {
   return (
-    <TokenState>
+    <UserState>
       <ShopingCartState>{children}</ShopingCartState>
-    </TokenState>
+    </UserState>
   );
 };
 export default GlobalState;

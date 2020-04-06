@@ -10,8 +10,10 @@ export type InitialShopingCartStateType = {
   OpenCart: (anchorEl: HTMLButtonElement | null) => void;
   CloseCart: () => void;
   cartOpen: { open: boolean; anchorEl: HTMLButtonElement | null };
-  CheckOut: () => void;
-  checkout?: ExecutionResult<CreateOrderMutation>;
+  CheckOut: () =>
+    | ExecutionResult<CreateOrderMutation>
+    | Promise<ExecutionResult<CreateOrderMutation>>;
+  Clear: () => void;
 };
 export type CartLine = { product: Product; quantity: number };
 const initialState: InitialShopingCartStateType = {
@@ -22,7 +24,8 @@ const initialState: InitialShopingCartStateType = {
   OpenCart: anchorEl => {},
   CloseCart: () => {},
   cartOpen: { open: false, anchorEl: null },
-  CheckOut: () => {}
+  CheckOut: () => ({} as ExecutionResult<CreateOrderMutation>),
+  Clear: () => {}
 };
 
 const ShopingCartContext = createContext<InitialShopingCartStateType>(

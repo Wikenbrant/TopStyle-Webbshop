@@ -12,7 +12,7 @@ export type Scalars = {
 };
 
 export type CreateOrderDetailInput = {
-  productID: Scalars['Int'];
+  productId: Scalars['Int'];
   quantity: Scalars['Int'];
   sum: Scalars['Int'];
 };
@@ -42,7 +42,7 @@ export type Mutation = {
   login: LoginResponse;
   logout: Scalars['Boolean'];
   revokeRefreshTokensForUser: Scalars['Boolean'];
-  createOrder: Order;
+  createOrder: Scalars['Int'];
   deleteOrder: Scalars['Boolean'];
 };
 
@@ -165,27 +165,11 @@ export type CreateOrderMutationVariables = {
 
 export type CreateOrderMutation = (
   { __typename?: 'Mutation' }
-  & { createOrder: (
-    { __typename?: 'Order' }
-    & Pick<Order, 'orderId'>
-    & { user: (
-      { __typename?: 'User' }
-      & Pick<User, 'userId' | 'name' | 'email'>
-    ), orderDetails: Array<(
-      { __typename?: 'OrderDetail' }
-      & Pick<OrderDetail, 'quantity' | 'sum'>
-      & { product: (
-        { __typename?: 'Product' }
-        & Pick<Product, 'productId' | 'name' | 'description' | 'price'>
-      ) }
-    )> }
-  ) }
+  & Pick<Mutation, 'createOrder'>
 );
 
 export type CreateProductMutationVariables = {
-  name: Scalars['String'];
-  description: Scalars['String'];
-  price: Scalars['Int'];
+  input: CreateProductInput;
 };
 
 
@@ -306,10 +290,8 @@ export type RegisterMutation = (
 );
 
 export type UpdateProductMutationVariables = {
+  input: UpdateProductInput;
   id: Scalars['Int'];
-  name?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  price?: Maybe<Scalars['Int']>;
 };
 
 
@@ -324,24 +306,7 @@ export type UpdateProductMutation = (
 
 export const CreateOrderDocument = gql`
     mutation CreateOrder($input: CreateOrderInput!) {
-  createOrder(input: $input) {
-    orderId
-    user {
-      userId
-      name
-      email
-    }
-    orderDetails {
-      product {
-        productId
-        name
-        description
-        price
-      }
-      quantity
-      sum
-    }
-  }
+  createOrder(input: $input)
 }
     `;
 export type CreateOrderMutationFn = ApolloReactCommon.MutationFunction<CreateOrderMutation, CreateOrderMutationVariables>;
@@ -370,8 +335,8 @@ export type CreateOrderMutationHookResult = ReturnType<typeof useCreateOrderMuta
 export type CreateOrderMutationResult = ApolloReactCommon.MutationResult<CreateOrderMutation>;
 export type CreateOrderMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateOrderMutation, CreateOrderMutationVariables>;
 export const CreateProductDocument = gql`
-    mutation CreateProduct($name: String!, $description: String!, $price: Int!) {
-  createProduct(input: {name: $name, description: $description, price: $price}) {
+    mutation CreateProduct($input: CreateProductInput!) {
+  createProduct(input: $input) {
     productId
     name
     description
@@ -394,9 +359,7 @@ export type CreateProductMutationFn = ApolloReactCommon.MutationFunction<CreateP
  * @example
  * const [createProductMutation, { data, loading, error }] = useCreateProductMutation({
  *   variables: {
- *      name: // value for 'name'
- *      description: // value for 'description'
- *      price: // value for 'price'
+ *      input: // value for 'input'
  *   },
  * });
  */
@@ -670,8 +633,8 @@ export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = ApolloReactCommon.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = ApolloReactCommon.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
 export const UpdateProductDocument = gql`
-    mutation UpdateProduct($id: Int!, $name: String, $description: String, $price: Int) {
-  updateProduct(id: $id, input: {name: $name, description: $description, price: $price}) {
+    mutation UpdateProduct($input: UpdateProductInput!, $id: Int!) {
+  updateProduct(id: $id, input: $input) {
     productId
     name
     description
@@ -694,10 +657,8 @@ export type UpdateProductMutationFn = ApolloReactCommon.MutationFunction<UpdateP
  * @example
  * const [updateProductMutation, { data, loading, error }] = useUpdateProductMutation({
  *   variables: {
+ *      input: // value for 'input'
  *      id: // value for 'id'
- *      name: // value for 'name'
- *      description: // value for 'description'
- *      price: // value for 'price'
  *   },
  * });
  */

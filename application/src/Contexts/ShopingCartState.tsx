@@ -16,10 +16,6 @@ const ShopingCartState: React.FC = ({ children }) => {
     cartOpen: { open: false, anchorEl: null }
   });
 
-  const [checkout, setCheckout] = useState<
-    ExecutionResult<CreateOrderMutation>
-  >();
-
   const AddProductToCart = (product: Product, quantity = 1) =>
     dispatch({
       type: ShopingCartActionTypes.ADD_PRODUCT,
@@ -49,15 +45,14 @@ const ShopingCartState: React.FC = ({ children }) => {
         })
       : CloseCart();
 
+  const [CreateOrder, result] = useCreateOrderMutation();
   const CheckOut = async () => {
-    const [CreateOrder, result] = useCreateOrderMutation();
-
     const response = await CreateOrder({
       variables: {
         input: {
           orderDetails: cart.map(
             ({ product: { productId, price }, quantity }) => ({
-              productID: productId,
+              productId: productId,
               quantity,
               sum: price * quantity
             })
@@ -65,9 +60,9 @@ const ShopingCartState: React.FC = ({ children }) => {
         }
       }
     });
-    setCheckout(response);
+    return response;
   };
-
+  const Clear = () => dispatch({ type: ShopingCartActionTypes.CLEAR });
   return (
     <ShopingCartContext.Provider
       value={{
@@ -79,7 +74,7 @@ const ShopingCartState: React.FC = ({ children }) => {
         OpenCart,
         CloseCart,
         CheckOut,
-        checkout
+        Clear
       }}
     >
       {children}

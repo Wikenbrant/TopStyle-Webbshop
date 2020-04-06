@@ -1,20 +1,3 @@
 mutation CreateOrder($input: CreateOrderInput!) {
-  createOrder(input: $input) {
-    orderId
-    user {
-      userId
-      name
-      email
-    }
-    orderDetails {
-      product {
-        productId
-        name
-        description
-        price
-      }
-      quantity
-      sum
-    }
-  }
+  createOrder(input: $input)
 }

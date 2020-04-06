@@ -12,21 +12,15 @@ import CardFooter from "../../components/Card/CardFooter";
 import signupPageStyle from "../../assets/jss/material-kit-react/views/loginPage";
 import image from "../../assets/img/bg7.jpg";
 import { Formik, Form } from "formik";
-import {
-  LoginMutationVariables,
-  useLoginMutation
-} from "../../generated/graphql";
+import { LoginMutationVariables } from "../../generated/graphql";
 import { Typography, Button } from "@material-ui/core";
-import TokenContext from "../../Contexts/TokenContext";
-import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router";
 import CustomFieldInput from "../../components/CustomInput/CustomFieldInput";
+import UserContext from "../../Contexts/UserContext";
 
 const validationSchema: yup.ObjectSchema<LoginMutationVariables> = yup.object({
-  email: yup
-    .string()
-    .email()
-    .required(),
-  password: yup.string().required()
+  email: yup.string().email().required(),
+  password: yup.string().required(),
 });
 
 const LoginPage: React.FC = () => {
@@ -34,13 +28,12 @@ const LoginPage: React.FC = () => {
   const initialValues: LoginMutationVariables & { errormessage: string } = {
     email: "",
     password: "",
-    errormessage: ""
+    errormessage: "",
   };
-  const [Login] = useLoginMutation();
+  const { LogIn, errors } = useContext(UserContext);
   const history = useHistory();
-  const { SetAccessToken } = useContext(TokenContext);
 
-  setTimeout(function() {
+  setTimeout(function () {
     setCardAnimation("");
   }, 700);
   const classes = signupPageStyle();
@@ -51,7 +44,7 @@ const LoginPage: React.FC = () => {
         style={{
           backgroundImage: "url(" + image + ")",
           backgroundSize: "cover",
-          backgroundPosition: "top center"
+          backgroundPosition: "top center",
         }}
       >
         <div className={classes.container}>
@@ -66,20 +59,18 @@ const LoginPage: React.FC = () => {
                     { setSubmitting, setErrors, resetForm }
                   ) => {
                     setSubmitting(true);
-                    try {
-                      const response = await Login({ variables: values });
-
-                      if (response.errors) {
-                        setErrors({ errormessage: response.errors.join(", ") });
-                        setSubmitting(false);
-                      } else if (response.data) {
-                        SetAccessToken(response.data.login.accessToken);
-                        resetForm();
-                        setSubmitting(false);
-                        history.push("/");
-                      }
-                    } catch (error) {
-                      setErrors({ errormessage: "Invalid logininformation" });
+                    if (
+                      await LogIn({
+                        email: values.email,
+                        password: values.password,
+                      })
+                    ) {
+                      resetForm();
+                      setSubmitting(false);
+                      history.push("/");
+                    }
+                    if (errors) {
+                      setErrors({ errormessage: errors });
                       setSubmitting(false);
                     }
                   }}
@@ -99,7 +90,7 @@ const LoginPage: React.FC = () => {
                           name="email"
                           textFieldProps={{ label: "Email...", type: "email" }}
                           formControlProps={{
-                            fullWidth: true
+                            fullWidth: true,
                           }}
                         />
                         <CustomFieldInput
@@ -107,10 +98,10 @@ const LoginPage: React.FC = () => {
                           textFieldProps={{
                             label: "Password",
                             type: "password",
-                            autoComplete: "off"
+                            autoComplete: "off",
                           }}
                           formControlProps={{
-                            fullWidth: true
+                            fullWidth: true,
                           }}
                         />
                       </CardBody>

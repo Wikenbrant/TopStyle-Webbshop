@@ -21,6 +21,7 @@ import { Typography, Button } from "@material-ui/core";
 import TokenContext from "../../Contexts/TokenContext";
 import { useHistory } from "react-router-dom";
 import CustomFieldInput from "../../components/CustomInput/CustomFieldInput";
+import UserContext from "../../Contexts/UserContext";
 
 const validationSchema: yup.ObjectSchema<RegisterMutationVariables> = yup.object(
   {
@@ -48,7 +49,7 @@ const RegisterPage: React.FC = () => {
     errormessage: ""
   };
   const [Register] = useRegisterMutation();
-  const [Login] = useLoginMutation();
+  const { LogIn } = useContext(UserContext);
   const history = useHistory();
   const { SetAccessToken } = useContext(TokenContext);
 
@@ -85,10 +86,10 @@ const RegisterPage: React.FC = () => {
                         setErrors({ errormessage: response.errors.join(", ") });
                         setSubmitting(false);
                       } else if (response.data) {
-                        const resp = await Login({ variables: values });
-                        if (resp.data) {
-                          SetAccessToken(resp.data.login.accessToken);
-                        }
+                        await LogIn({
+                          email: values.email,
+                          password: values.password
+                        });
                         resetForm();
                         setSubmitting(false);
                         history.push("/");

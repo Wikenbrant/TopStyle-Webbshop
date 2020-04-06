@@ -8,7 +8,7 @@ import Button from "@material-ui/core/Button";
 
 import buttonStyle from "../../assets/jss/material-kit-react/components/buttonStyle";
 
-interface Props {
+export interface ButtonProps {
   color?:
     | "primary"
     | "info"
@@ -40,7 +40,7 @@ interface Props {
   style?: React.CSSProperties;
 }
 
-const RegularButton = React.forwardRef<HTMLButtonElement, Props>(
+const RegularButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (props, ref) => {
     const {
       color,

@@ -12,7 +12,7 @@ import Drawer from "@material-ui/core/Drawer";
 import Menu from "@material-ui/icons/Menu";
 // core components
 import styles from "../../assets/jss/material-kit-react/components/headerStyle";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { Typography } from "@material-ui/core";
 import Cart from "../Cart/Cart";
 
@@ -100,7 +100,7 @@ const Header: React.FC<Props> = props => {
     [classes.fixed]: fixed
   });
   const brandComponent = (
-    <Button onClick={() => history.push("/")} className={classes.title}>
+    <Button href="/" className={classes.title}>
       <Typography variant="h5">{brand}</Typography>
     </Button>
   );

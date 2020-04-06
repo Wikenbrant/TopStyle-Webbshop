@@ -1,28 +1,22 @@
-/*eslint-disable*/
-import React from "react";
-import DeleteIcon from "@material-ui/icons/Delete";
-import IconButton from "@material-ui/core/IconButton";
+import React, { useContext } from "react";
 // react components for routing our app without refresh
-import { Link } from "react-router-dom";
-
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
+import { useHistory } from "react-router-dom";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Tooltip from "@material-ui/core/Tooltip";
-
-// @material-ui/icons
-import { Apps, CloudDownload } from "@material-ui/icons";
 
 // core components
 //import CustomDropdown from "components/CustomDropdown/CustomDropdown.js";
 import Button from "../CustomButtons/Button";
 
 import headerLinksStyle from "../../assets/jss/material-kit-react/components/headerLinksStyle";
-import Cart from "../Cart/Cart";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import UserContext from "../../Contexts/UserContext";
 
 const HeaderLinks = () => {
   const classes = headerLinksStyle();
+  const { loggedIn, name, LogOut } = useContext(UserContext);
+  const history = useHistory();
   return (
     <List className={classes.list}>
       <ListItem className={classes.listItem}>
@@ -75,6 +69,39 @@ const HeaderLinks = () => {
             <i className={classes.socialIcons + " fab fa-instagram"} />
           </Button>
         </Tooltip>
+      </ListItem>
+      <ListItem className={classes.listItem}>
+        {loggedIn ? (
+          <Button
+            href="https://twitter.com"
+            target="_blank"
+            color="transparent"
+            className={classes.navLink}
+            onClick={async e => {
+              await LogOut();
+              history.push("/");
+            }}
+          >
+            Logout
+          </Button>
+        ) : (
+          <>
+            <Button
+              color="transparent"
+              className={classes.navLink}
+              href="/Login"
+            >
+              Login
+            </Button>
+            <Button
+              color="transparent"
+              className={classes.navLink}
+              href="/Register"
+            >
+              Register
+            </Button>
+          </>
+        )}
       </ListItem>
     </List>
   );

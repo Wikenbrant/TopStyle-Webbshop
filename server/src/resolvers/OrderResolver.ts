@@ -12,15 +12,15 @@ import {
 import Order from "../entity/Order";
 import { isAuth } from "../middleware/isAuth";
 import { MyContext } from "../MyContext";
-import User from "../entity/User";
+//import User from "../entity/User";
 import { getRepository } from "typeorm";
-import OrderDetail from "../entity/OrderDetail";
-import { Product } from "../entity/Product";
+//import OrderDetail from "../entity/OrderDetail";
+//import { Product } from "../entity/Product";
 
 @InputType()
 class CreateOrderDetailInput {
   @Field(() => Int)
-  productID: number;
+  productId: number;
   @Field(() => Int)
   quantity: number;
   @Field(() => Int)
@@ -66,33 +66,18 @@ export default class OrderResolver {
     }
   }
 
-  @Mutation(() => Order)
+  @Mutation(() => Int)
   @UseMiddleware(isAuth)
   async createOrder(
-    @Arg("input", () => CreateOrderInput) input: CreateOrderInput,
-    @Ctx() ctx: MyContext
+    @Arg("input", () => CreateOrderInput) { orderDetails }: CreateOrderInput,
+    @Ctx() { payload }: MyContext
   ) {
-    console.log(ctx);
-    try {
-      const user = await User.findOne({ where: { id: 1 } });
-      if (!user) return null;
-
-      const details = input.orderDetails.map(
-        async ({ productID, quantity, sum }) => {
-          const product = await Product.findOne({ where: { id: productID } });
-          return OrderDetail.create({ product, quantity, sum });
-        }
-      );
-      const order = await Order.create({
-        user
-      }).save();
-      const orderDetails = await Promise.all(details);
-      order.orderDetails = orderDetails;
-
-      return await order.save();
-    } catch (error) {
-      return null;
-    }
+    if (!payload) throw Error("cant find user");
+    const order = await Order.create({
+      orderDetails,
+      userId: +payload.userId
+    }).save();
+    return order.orderId;
   }
 
   @Mutation(() => Boolean)
