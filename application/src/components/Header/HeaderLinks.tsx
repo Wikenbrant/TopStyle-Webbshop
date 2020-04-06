@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
-// react components for routing our app without refresh
-import { useHistory } from "react-router-dom";
+import React, { useContext, useState, useEffect } from "react";
+// @material-ui/core components
+import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -10,13 +10,9 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Button from "../CustomButtons/Button";
 
 import headerLinksStyle from "../../assets/jss/material-kit-react/components/headerLinksStyle";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import UserContext from "../../Contexts/UserContext";
 
 const HeaderLinks = () => {
   const classes = headerLinksStyle();
-  const { loggedIn, name, LogOut } = useContext(UserContext);
-  const history = useHistory();
   return (
     <List className={classes.list}>
       <ListItem className={classes.listItem}>
@@ -69,39 +65,6 @@ const HeaderLinks = () => {
             <i className={classes.socialIcons + " fab fa-instagram"} />
           </Button>
         </Tooltip>
-      </ListItem>
-      <ListItem className={classes.listItem}>
-        {loggedIn ? (
-          <Button
-            href="https://twitter.com"
-            target="_blank"
-            color="transparent"
-            className={classes.navLink}
-            onClick={async e => {
-              await LogOut();
-              history.push("/");
-            }}
-          >
-            Logout
-          </Button>
-        ) : (
-          <>
-            <Button
-              color="transparent"
-              className={classes.navLink}
-              href="/Login"
-            >
-              Login
-            </Button>
-            <Button
-              color="transparent"
-              className={classes.navLink}
-              href="/Register"
-            >
-              Register
-            </Button>
-          </>
-        )}
       </ListItem>
     </List>
   );

@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import makeLandingPageStyle from "../../assets/jss/material-kit-react/views/landingPage";
 import Parallax from "../../components/Parallax/Parallax";
 import GridContainer from "../../components/Grid/GridContainer";
 import GridItem from "../../components/Grid/GridItem";
 import classNames from "classnames";
 import ProductSection from "./Sections/ProductSection";
+import Button from "../../components/CustomButtons/Button";
+import UserContext from "../../Contexts/UserContext";
 
 const LandingPage = () => {
   const classes = makeLandingPageStyle();
+  const { loggedIn, LogOut } = useContext(UserContext);
   return (
     <div>
       <Parallax filter image={"https://source.unsplash.com/random"}>
@@ -18,6 +21,28 @@ const LandingPage = () => {
                 Your best experience Starts With Us.
               </h1>
               <h4>The best producs to the best price.</h4>
+              {loggedIn ? (
+                <Button
+                  href="/"
+                  onClick={async (e) => await LogOut()}
+                  className={classes.navLink}
+                >
+                  Loggout
+                </Button>
+              ) : (
+                <>
+                  <Button
+                    href="/Login"
+                    className={classes.navLink}
+                    variant="outlined"
+                  >
+                    Login
+                  </Button>
+                  <Button href="/Register" className={classes.navLink}>
+                    Register
+                  </Button>
+                </>
+              )}
             </GridItem>
           </GridContainer>
         </div>

@@ -12,7 +12,6 @@ import {
 import ShopingCartContext from "../../../Contexts/ShopingCartContext";
 import { Typography } from "@material-ui/core";
 import Button from "../../../components/CustomButtons/Button";
-//import { useHistory } from "react-router-dom";
 
 export default function ProductSection() {
   const classes = productStyle();
@@ -20,13 +19,9 @@ export default function ProductSection() {
   const [GetAllProducts] = useGetAllProductsLazyQuery({
     onCompleted: ({ products }) => setProducts(products as Product[])
   });
-  //const history = useHistory();
-  //const [length, setLength] = useState(0);
-
   useEffect(() => {
     GetAllProducts();
-    //setLength(history.length);
-  }, []);
+  }, [GetAllProducts]);
 
   const { AddProductToCart, OpenCart } = useContext(ShopingCartContext);
   return (

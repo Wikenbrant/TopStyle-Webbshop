@@ -10,10 +10,10 @@ import TokenContext from "./TokenContext";
 import UserReducer, { UserActionTypes } from "../Reducers/UserReducer";
 
 const UserState: React.FC = ({ children }) => {
-  const { SetAccessToken } = useContext(TokenContext);
+  const { SetAccessToken, Loggedin } = useContext(TokenContext);
   const [{ name, loggedIn, errors, userId }, dispatch] = useReducer(
     UserReducer,
-    { loggedIn: false }
+    { loggedIn: Loggedin() }
   );
   const [Login] = useLoginMutation();
   const [Logout] = useLogoutMutation();

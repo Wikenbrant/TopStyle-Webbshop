@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 
@@ -12,9 +12,10 @@ import Drawer from "@material-ui/core/Drawer";
 import Menu from "@material-ui/icons/Menu";
 // core components
 import styles from "../../assets/jss/material-kit-react/components/headerStyle";
-import { useHistory, Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Typography } from "@material-ui/core";
 import Cart from "../Cart/Cart";
+import UserContext from "../../Contexts/UserContext";
 
 interface Props {
   color:
@@ -53,10 +54,13 @@ interface Props {
   };
 }
 
-const Header: React.FC<Props> = props => {
+const Header: React.FC<Props> = (props) => {
   const history = useHistory();
   const classes = styles();
   const [mobileOpen, setMobileOpen] = React.useState(false);
+
+  //const [loggedIn, setLoggedIn] = React.useState(false);
+  //React.useEffect(() => {}, []);
   React.useEffect(() => {
     if (props.changeColorOnScroll) {
       window.addEventListener("scroll", headerColorChange);
@@ -97,7 +101,7 @@ const Header: React.FC<Props> = props => {
     [classes.appBar]: true,
     [classes[color]]: color,
     [classes.absolute]: absolute,
-    [classes.fixed]: fixed
+    [classes.fixed]: fixed,
   });
   const brandComponent = (
     <Button href="/" className={classes.title}>
@@ -137,7 +141,7 @@ const Header: React.FC<Props> = props => {
           anchor={"right"}
           open={mobileOpen}
           classes={{
-            paper: classes.drawerPaper
+            paper: classes.drawerPaper,
           }}
           onClose={handleDrawerToggle}
         >
@@ -151,6 +155,6 @@ const Header: React.FC<Props> = props => {
   );
 };
 Header.defaultProps = {
-  color: "white"
+  color: "white",
 };
 export default Header;

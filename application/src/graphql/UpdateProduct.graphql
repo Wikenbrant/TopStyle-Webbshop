@@ -1,5 +1,13 @@
-mutation UpdateProduct($input: UpdateProductInput!, $id: Int!) {
-  updateProduct(id: $id, input: $input) {
+mutation UpdateProduct(
+  $id: Int!
+  $name: String
+  $description: String
+  $price: Int
+) {
+  updateProduct(
+    id: $id
+    input: { name: $name, description: $description, price: $price }
+  ) {
     productId
     name
     description

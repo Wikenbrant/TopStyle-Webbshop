@@ -10,7 +10,7 @@ import {
   IconButton,
   Popper,
   ClickAwayListener,
-  Fade
+  Fade,
 } from "@material-ui/core";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import GridContainer from "../Grid/GridContainer";
@@ -30,9 +30,9 @@ const Cart: React.FC<{}> = () => {
     SetProductToCart,
     RemoveProductFromCart,
     CheckOut,
-    Clear
+    Clear,
   } = useContext(ShopingCartContext);
-  const useStyles = makeStyles(theme => ({
+  const useStyles = makeStyles((theme) => ({
     container: { float: "right", position: "relative" },
     icon: { color: "inherit" },
     cart: {
@@ -50,25 +50,28 @@ const Cart: React.FC<{}> = () => {
         width: 20,
         textAlign: "center",
         fontFamily: "roboto",
-        zIndex: -1
-      }
+        zIndex: -1,
+      },
     },
     paper: {
       padding: theme.spacing(1),
       paddingTop: 30,
       width: 300,
       minHeight: 50,
-      zIndex: 3
-    }
+      zIndex: 3,
+    },
   }));
   const history = useHistory();
   const classes = useStyles();
   const handleCheckout = async () => {
-    const response = await CheckOut();
-    if (response.data) {
-      Clear();
-      history.push(`/order/${response.data.createOrder}`);
-    } else {
+    try {
+      const response = await CheckOut();
+      if (response.data) {
+        Clear();
+        history.push(`/order/${response.data.createOrder}`);
+      }
+    } catch (error) {
+      alert("You must login");
     }
   };
   return (
@@ -77,7 +80,7 @@ const Cart: React.FC<{}> = () => {
         <Button
           id="cart"
           className={classes.icon}
-          onClick={e => {
+          onClick={(e) => {
             if (cart.length > 0) {
               OpenCart(e.currentTarget);
             }
@@ -95,7 +98,7 @@ const Cart: React.FC<{}> = () => {
         transition
       >
         {({ TransitionProps }) => (
-          <ClickAwayListener onClickAway={e => CloseCart()}>
+          <ClickAwayListener onClickAway={(e) => CloseCart()}>
             <Paper className={classes.paper}>
               <GridContainer>
                 <GridContainer
@@ -126,14 +129,14 @@ const Cart: React.FC<{}> = () => {
                             style={{ fontSize: ".9rem" }}
                             value={quantity}
                             type="number"
-                            onChange={e =>
+                            onChange={(e) =>
                               SetProductToCart(product, +e.currentTarget.value)
                             }
                             InputProps={{
                               startAdornment: (
                                 <InputAdornment position="start">
                                   <IconButton
-                                    onClick={e =>
+                                    onClick={(e) =>
                                       RemoveProductFromCart(
                                         product.productId,
                                         1
@@ -150,13 +153,15 @@ const Cart: React.FC<{}> = () => {
                                   st
                                   <IconButton
                                     style={{ marginLeft: 5 }}
-                                    onClick={e => AddProductToCart(product, 1)}
+                                    onClick={(e) =>
+                                      AddProductToCart(product, 1)
+                                    }
                                     size="small"
                                   >
                                     <AddIcon />
                                   </IconButton>
                                 </InputAdornment>
-                              )
+                              ),
                             }}
                           />
                         </GridItem>
@@ -194,7 +199,7 @@ const Cart: React.FC<{}> = () => {
                       width: "100%",
                       marginLeft: 30,
                       marginRight: 30,
-                      marginBottom: 10
+                      marginBottom: 10,
                     }}
                     onClick={handleCheckout}
                   >

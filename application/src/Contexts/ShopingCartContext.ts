@@ -18,14 +18,14 @@ export type InitialShopingCartStateType = {
 export type CartLine = { product: Product; quantity: number };
 const initialState: InitialShopingCartStateType = {
   cart: [],
-  AddProductToCart: product => {},
-  SetProductToCart: product => {},
-  RemoveProductFromCart: productId => {},
-  OpenCart: anchorEl => {},
+  AddProductToCart: (product) => {},
+  SetProductToCart: (product) => {},
+  RemoveProductFromCart: (productId) => {},
+  OpenCart: (anchorEl) => {},
   CloseCart: () => {},
   cartOpen: { open: false, anchorEl: null },
   CheckOut: () => ({} as ExecutionResult<CreateOrderMutation>),
-  Clear: () => {}
+  Clear: () => {},
 };
 
 const ShopingCartContext = createContext<InitialShopingCartStateType>(

@@ -169,7 +169,9 @@ export type CreateOrderMutation = (
 );
 
 export type CreateProductMutationVariables = {
-  input: CreateProductInput;
+  name: Scalars['String'];
+  description: Scalars['String'];
+  price: Scalars['Int'];
 };
 
 
@@ -290,8 +292,10 @@ export type RegisterMutation = (
 );
 
 export type UpdateProductMutationVariables = {
-  input: UpdateProductInput;
   id: Scalars['Int'];
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  price?: Maybe<Scalars['Int']>;
 };
 
 
@@ -335,8 +339,8 @@ export type CreateOrderMutationHookResult = ReturnType<typeof useCreateOrderMuta
 export type CreateOrderMutationResult = ApolloReactCommon.MutationResult<CreateOrderMutation>;
 export type CreateOrderMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateOrderMutation, CreateOrderMutationVariables>;
 export const CreateProductDocument = gql`
-    mutation CreateProduct($input: CreateProductInput!) {
-  createProduct(input: $input) {
+    mutation CreateProduct($name: String!, $description: String!, $price: Int!) {
+  createProduct(input: {name: $name, description: $description, price: $price}) {
     productId
     name
     description
@@ -359,7 +363,9 @@ export type CreateProductMutationFn = ApolloReactCommon.MutationFunction<CreateP
  * @example
  * const [createProductMutation, { data, loading, error }] = useCreateProductMutation({
  *   variables: {
- *      input: // value for 'input'
+ *      name: // value for 'name'
+ *      description: // value for 'description'
+ *      price: // value for 'price'
  *   },
  * });
  */
@@ -633,8 +639,8 @@ export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = ApolloReactCommon.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = ApolloReactCommon.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
 export const UpdateProductDocument = gql`
-    mutation UpdateProduct($input: UpdateProductInput!, $id: Int!) {
-  updateProduct(id: $id, input: $input) {
+    mutation UpdateProduct($id: Int!, $name: String, $description: String, $price: Int) {
+  updateProduct(id: $id, input: {name: $name, description: $description, price: $price}) {
     productId
     name
     description
@@ -657,8 +663,10 @@ export type UpdateProductMutationFn = ApolloReactCommon.MutationFunction<UpdateP
  * @example
  * const [updateProductMutation, { data, loading, error }] = useUpdateProductMutation({
  *   variables: {
- *      input: // value for 'input'
  *      id: // value for 'id'
+ *      name: // value for 'name'
+ *      description: // value for 'description'
+ *      price: // value for 'price'
  *   },
  * });
  */

@@ -44,7 +44,7 @@ export enum ShopingCartActionTypes {
   SET_PRODUCT = "SET_PRODUCT",
   OPEN = "OPEN",
   CLOSE = "CLOSE",
-  CLEAR = "CLEAR"
+  CLEAR = "CLEAR",
 }
 
 const ShopingCartReducer: React.Reducer<
@@ -58,16 +58,16 @@ const ShopingCartReducer: React.Reducer<
     case ShopingCartActionTypes.SET_PRODUCT: {
       const updatedCart = [...state.cart];
       const updatedItemIndex = updatedCart.findIndex(
-        item => item.product.productId === action.payload.product.productId
+        (item) => item.product.productId === action.payload.product.productId
       );
       if (updatedItemIndex < 0) {
         updatedCart.push({
           product: action.payload.product,
-          quantity: action.payload.quantity
+          quantity: action.payload.quantity,
         });
       } else {
         const updatedItem = {
-          ...updatedCart[updatedItemIndex]
+          ...updatedCart[updatedItemIndex],
         };
 
         updatedItem.quantity = action.payload.quantity;
@@ -82,16 +82,16 @@ const ShopingCartReducer: React.Reducer<
     case ShopingCartActionTypes.ADD_PRODUCT: {
       const updatedCart = [...state.cart];
       const updatedItemIndex = updatedCart.findIndex(
-        item => item.product.productId === action.payload.product.productId
+        (item) => item.product.productId === action.payload.product.productId
       );
       if (updatedItemIndex < 0) {
         updatedCart.push({
           product: action.payload.product,
-          quantity: action.payload.quantity
+          quantity: action.payload.quantity,
         });
       } else {
         const updatedItem = {
-          ...updatedCart[updatedItemIndex]
+          ...updatedCart[updatedItemIndex],
         };
         updatedItem.quantity += action.payload.quantity;
         updatedCart[updatedItemIndex] = updatedItem;
@@ -102,11 +102,11 @@ const ShopingCartReducer: React.Reducer<
     case ShopingCartActionTypes.REMOVE_PRODUCT: {
       const updatedCart = [...state.cart];
       const updatedItemIndex = updatedCart.findIndex(
-        item => item.product.productId === action.payload.productId
+        (item) => item.product.productId === action.payload.productId
       );
 
       const updatedItem = {
-        ...updatedCart[updatedItemIndex]
+        ...updatedCart[updatedItemIndex],
       };
       updatedItem.quantity -= action.payload.quantity;
       if (updatedItem.quantity <= 0) {

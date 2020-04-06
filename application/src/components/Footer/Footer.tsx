@@ -21,11 +21,15 @@ const Footer: React.FC<Props> = props => {
     [classes.footer]: true,
     [classes.footerWhiteFont]: whiteFont
   });
+  const aClasses = classNames({
+    [classes.a]: true,
+    [classes.footerWhiteFont]: whiteFont
+  });
   return (
     <footer className={footerClasses} style={{ margin: 30 }}>
       <Container>
-        <Typography variant="h6" color="textSecondary">
-          &copy; {new Date().getFullYear()} Made by Mathias Wikenbrant
+        <Typography paragraph>
+          &copy; {new Date().getFullYear()} Made by Mathias Wikenprant
         </Typography>
       </Container>
     </footer>

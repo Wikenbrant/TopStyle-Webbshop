@@ -6,6 +6,7 @@ import GridContainer from "../../components/Grid/GridContainer";
 import GridItem from "../../components/Grid/GridItem";
 import classNames from "classnames";
 import makeLandingPageStyle from "../../assets/jss/material-kit-react/views/landingPage";
+import OrderSection from "./Sections/OrderSection";
 
 interface Props {}
 
@@ -15,7 +16,7 @@ const Checkout = (props: Props) => {
   const [order, setOrder] = useState<Order>();
   const [GetOrder, { data, error, loading }] = useGetOrderLazyQuery({
     variables: { id: Number(id) },
-    onCompleted: ({ order }) => setOrder(order as Order)
+    onCompleted: ({ order }) => setOrder(order as Order),
   });
   useEffect(() => {
     GetOrder();
@@ -33,7 +34,7 @@ const Checkout = (props: Props) => {
       </Parallax>
       <div className={classNames(classes.main, classes.mainRaised)}>
         <div className={classes.container}>
-          <div>{JSON.stringify(order, null, 10)}</div>
+          <OrderSection order={order} />
         </div>
       </div>
     </div>

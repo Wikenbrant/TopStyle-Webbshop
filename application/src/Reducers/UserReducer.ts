@@ -11,7 +11,7 @@ export enum UserActionTypes {
   SET_USERID = "SET_USERID",
   SET_LOGGEDIN = "SET_LOGGEDIN",
   SET_ERRORS = "SET_ERRORS",
-  LOGOUT = "LOGOUT"
+  LOGOUT = "LOGOUT",
 }
 const UserReducer: React.Reducer<
   {
