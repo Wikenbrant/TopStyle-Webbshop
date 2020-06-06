@@ -14,7 +14,7 @@
     },
     "dependencies": {
         "@material-ui/core": "^4.9.7",
-        "apollo-server-express": "^2.9.9",
+        "apollo-server-express": "^2.14.2",
         "babel-plugin-transform-typescript-metadata": "^0.3.0",
         "bcryptjs": "^2.4.3",
         "cookie-parser": "^1.4.5",
